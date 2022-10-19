@@ -8,6 +8,7 @@ Requires Python 3.8 with conda:
 
 ```bash
 conda create --name constraints python=3.8
+conda activate constraints
 conda install -c conda-forge tranquilizer
 conda install -c conda-forge werkzeug==2.1.2
 ```
