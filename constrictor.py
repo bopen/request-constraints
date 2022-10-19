@@ -6,7 +6,7 @@ def load_valid_combinations(
         path: str
 ) -> list[dict[str, set[Any]]]:
     """
-    Loads valid combinations from a JSON file
+    Loads valid params combinations from a JSON file
     at path :param:`path`
 
     :param path: the path to the .json file containing the valid combinations
@@ -14,7 +14,7 @@ def load_valid_combinations(
 
     :rtype: list[dict[str, set[Any]]]:
     :return: list of dictionaries containing all the valid combinations for a
-    given dataset
+    given dataset.
 
     """
     combinations = json.load(open(path))
@@ -24,12 +24,12 @@ def load_valid_combinations(
     return combinations
 
 
-def apply_constraints(
+def get_possible_values(
         valid_combinations: list[dict[str, set[Any]]],
         current_selection: dict[str, set[Any]],
 )-> dict[str, set[Any]]:
     """Checks the current selection against all valid combinations.
-    TODO: Handles special cases such as "date" field.
+    TODO: Handles special cases such as the "date" field.
     A combination is valid if every field contains
     at least one value from the current selection.
     If a combination is valid, its values are added to the pool
@@ -79,14 +79,15 @@ def apply_constraints(
         'date': {'1990-01-01;1999-12-31'}
      }
     """
-    return get_possible_values(current_selection, valid_combinations)
+    return get_possible_values_no_range(current_selection, valid_combinations)
 
 
-def get_possible_values(
+def get_possible_values_no_range(
         valid_combinations: list[dict[str, set[Any]]],
         current_selection: dict[str, set[Any]],
 ) -> dict[str, set[Any]]:
-    """Works only for enumerated fields.
+    """Works only for enumerated fields, i.e. fields with values
+     that must be selected one by one (no ranges).
     Checks the current selection against all valid combinations.
     A combination is valid if every field contains
     at least one value from the current selection.
