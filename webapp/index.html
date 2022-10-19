@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Testing constraints</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="./app.js"></script>
+</head>
+
+<body>
+    <h1>Testing constraints</h1>
+    <main>
+        <div class="border padded">
+            <form id="form">
+            </form>
+        </div>
+        <aside>
+            <div class="border padded">
+                <textarea id="constraints" class="full-width full-height" placeholder="Constraints">[
+    {"level": ["500"], "param": ["Z", "T"], "step": ["24", "36", "48"]},
+    {"level": ["1000"], "param": ["Z"], "step": ["24", "48"]},
+    {"level": ["850"], "param": ["T"], "step": ["36", "48"]}
+]
+</textarea>
+            </div>
+            <div class="border padded">
+                <textarea id="configuration" class="full-width full-height" placeholder="Possible values">{
+    "level": ["500", "850", "1000"],
+    "param": ["Z", "T"],
+    "step": ["24", "36", "48"]
+}
+</textarea>
+            </div>
+        </aside>
+    </main>
+    <section id="disabled"></section>
+</body>
+
+</html>
