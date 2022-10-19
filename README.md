@@ -29,5 +29,4 @@ Now you should have two servie running:
 - a Web application on http://locahost:8085
 - a REST API server on <http://locahost:8086>
 
-Open the browser on <http://locahost:8085>
-
+Open the browser on <http://locahost:8085> (or type `make open`).
