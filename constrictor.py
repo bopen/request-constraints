@@ -1,35 +1,29 @@
-from typing import Any
-import json
+from typing import Any, Dict, Set, List
 
-
-def load_valid_combinations(
-        path: str
-) -> list[dict[str, set[Any]]]:
+def load_combinations(combinations: List) -> List[Dict[str, Set[Any]]]:
     """
-    Loads valid params combinations from a JSON file
-    at path :param:`path`
+    Loads valid combinations for a given dataset
 
-    :param path: the path to the .json file containing the valid combinations
-    :type: srt
+    :param combinations:
+    :type: List
 
     :rtype: list[dict[str, set[Any]]]:
-    :return: list of dictionaries containing all the valid combinations for a
+    :return: list of dictionaries containing all valid combinations for a
     given dataset.
 
     """
-    combinations = json.load(open(path))
     for combination in combinations:
         for field_name, field_values in combination.items():
             combination[field_name] = set(field_values)
     return combinations
 
 
-def get_possible_values(
-        valid_combinations: list[dict[str, set[Any]]],
-        current_selection: dict[str, set[Any]],
-)-> dict[str, set[Any]]:
+def apply_constraints(
+    valid_combinations: List[Dict[str, Set[Any]]],
+    current_selection: Dict[str, List[Any]],
+)-> Dict[str, Set[Any]]:
     """Checks the current selection against all valid combinations.
-    TODO: Handles special cases such as the "date" field.
+    TODO: Handle special cases such as the "date" field.
     A combination is valid if every field contains
     at least one value from the current selection.
     If a combination is valid, its values are added to the pool
@@ -62,9 +56,9 @@ def get_possible_values(
 
     :param current_selection: a dictionary containing the current selection
     e.g. current_selection = {
-        "date": {"1990-01-01;1999-12-31"},
-        "param": {"T"},
-        "level": {'850'},
+        "date": ['1990-01-01;1999-12-31'],
+        "param": ['T'],
+        "level": ['850'],
     }
     :type: dict[str, set[Any]]:
 
@@ -79,13 +73,13 @@ def get_possible_values(
         'date': {'1990-01-01;1999-12-31'}
      }
     """
-    return get_possible_values_no_range(current_selection, valid_combinations)
+    return get_possible_values(current_selection, valid_combinations)
 
 
-def get_possible_values_no_range(
-        valid_combinations: list[dict[str, set[Any]]],
-        current_selection: dict[str, set[Any]],
-) -> dict[str, set[Any]]:
+def get_possible_values(
+    current_selection: Dict[str, Set[Any]],
+    valid_combinations: List[Dict[str, List[Any]]],
+) -> Dict[str, Set[Any]]:
     """Works only for enumerated fields, i.e. fields with values
      that must be selected one by one (no ranges).
     Checks the current selection against all valid combinations.
@@ -106,28 +100,27 @@ def get_possible_values_no_range(
 
     :param current_selection: a dictionary containing the current selectio
     e.g. current_selection = {
-    "param": {"T"},
-    "level": {"850", "500"},
-    "step": {"36"}
+    "param": ["T"],
+    "level": ["850", "500"],
+    "step": ["36"]
     }
     :type: dict[str, set[Any]]:
 
-    :rtype: dict[str, set[Any]]:
+    :rtype: Dict[str, Set[Any]]
     :return: a dictionary containing all possible values,
     i.e. those that can still be selected without running into an invalid request
     e.g. {'level': {'500', '850'}, 'param': {'T', 'Z'}, 'step': {'24', '36', '48'}}
 
     """
-
-    result: dict[str, set[Any]] = {}
+    result: Dict[str, Set[Any]] = {}
     for valid_combination in valid_combinations:
         ok = True
         for filed_name, selected_values in current_selection.items():
-            if len(selected_values & valid_combination[filed_name]) == 0:
+            if len(set(selected_values) & valid_combination[filed_name]) == 0:
                 ok = False
                 break
         if ok:
             for filed_name, valid_values in valid_combination.items():
                 current = result.setdefault(filed_name, set())
-                current |= valid_values
-    return result
+                current |= set(valid_values)
+    return {k: list(v) for (k, v) in result.items()}
