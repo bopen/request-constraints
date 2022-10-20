@@ -26,12 +26,15 @@ def get_possible_values(
     result: Dict[str, Set[Any]] = {}
     for valid_combination in valid_combinations:
         ok = True
-        for filed_name, selected_values in current_selection.items():
-            if len(set(selected_values) & valid_combination[filed_name]) == 0:
-                ok = False
-                break
+        for field_name, selected_values in current_selection.items():
+            if field_name in valid_combination.keys():
+                if len(set(selected_values) & valid_combination[field_name]) == 0:
+                    ok = False
+                    break
+            else:
+                result.setdefault(field_name, list(current_selection[field_name]))
         if ok:
-            for filed_name, valid_values in valid_combination.items():
-                current = result.setdefault(filed_name, set())
+            for field_name, valid_values in valid_combination.items():
+                current = result.setdefault(field_name, set())
                 current |= set(valid_values)
     return {k: list(v) for (k, v) in result.items()}
