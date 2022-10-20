@@ -60,9 +60,10 @@ $(document).ready(() => {
   };
 
   const updateValidityState = (state, fieldName = null) => {
-    Object.entries(state).forEach(([name, validValues]) => {
+    Object.entries(config).forEach(([name, values]) => {
       const $input = $(`input[name="${name}"]`);
       $input.each((i, el) => {
+        const validValues = state[el.name] || [];
         const $field = $(el).closest(".field");
         if (validValues.includes(el.value)) {
           $field.get(0).classList.add("valid");
