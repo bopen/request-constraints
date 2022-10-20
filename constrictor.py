@@ -12,7 +12,9 @@ def load_combinations(combinations: List) -> List[Dict[str, Set[Any]]]:
 
 
 def apply_constraints(valid_combinations, current_selection):
-    return get_possible_values(current_selection, valid_combinations)
+    if current_selection:
+        return get_possible_values(current_selection, valid_combinations)
+    return {}
 
 
 # Le combinazioni valide sono quelle per le quali, PER OGNI CAMPO,
