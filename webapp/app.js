@@ -15,16 +15,19 @@ $(document).ready(() => {
   let config = JSON.parse($config.val());
   let constraints = JSON.parse($constraints.val());
 
-  $constraints.on("change", () => {
-    constraints = JSON.parse(ev.target.value);
-    localStorage.setItem("constraints", ev.target.value);
+  $constraints.on("keyup", () => {
+    try {
+      constraints = JSON.parse($constraints.val());
+      localStorage.setItem("constraints", $constraints.val());
+    } catch (e) {}
   });
 
-  $config.on("change", (ev) => {
-    console.log("ssss");
-    config = JSON.parse(ev.target.value);
-    localStorage.setItem("config", ev.target.value);
-    prepareForm();
+  $config.on("keyup", () => {
+    try {
+      config = JSON.parse($config.val());
+      localStorage.setItem("config", $config.val());
+      prepareForm();
+    } catch (e) {}
   });
 
   const getSelection = () => {
@@ -43,11 +46,12 @@ $(document).ready(() => {
     formData.append("constraints", JSON.stringify(constraints));
     formData.append("selection", JSON.stringify(selection));
     try {
-      result = fetch("http://localhost:8086/validate", {
+      result = await fetch("http://localhost:8086/validate", {
         method: "POST",
         cache: "no-cache",
         body: formData,
       }).then((response) => response.json());
+      $("#output").text(JSON.stringify(result, undefined, 2));
     } catch (err) {
       console.log(err);
       return Promise.reject();
@@ -56,9 +60,10 @@ $(document).ready(() => {
   };
 
   const updateValidityState = (state, fieldName = null) => {
-    Object.entries(state).forEach(([name, validValues]) => {
+    Object.entries(config).forEach(([name, values]) => {
       const $input = $(`input[name="${name}"]`);
       $input.each((i, el) => {
+        const validValues = state[el.name] || [];
         const $field = $(el).closest(".field");
         if (validValues.includes(el.value)) {
           $field.get(0).classList.add("valid");

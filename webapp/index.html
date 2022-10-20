@@ -12,21 +12,26 @@
 <body>
     <h1>Testing constraints</h1>
     <main>
-        <div class="border padded">
-            <form id="form">
-            </form>
-        </div>
-        <aside>
+        <section class="main-block">
             <div class="border padded">
-                <textarea id="constraints" class="full-width full-height" placeholder="Constraints">[
+                <form id="form">
+                </form>
+            </div>
+            <pre id="output" class="border padded"></pre>
+        </section>
+        <aside>
+            <div class="border padded section-with-h">
+                <h2>Constraints</h2>
+                <textarea id="constraints" class="full-width">[
     {"level": ["500"], "param": ["Z", "T"], "step": ["24", "36", "48"]},
     {"level": ["1000"], "param": ["Z"], "step": ["24", "48"]},
     {"level": ["850"], "param": ["T"], "step": ["36", "48"]}
 ]
 </textarea>
             </div>
-            <div class="border padded">
-                <textarea id="configuration" class="full-width full-height" placeholder="Possible values">{
+            <div class="border padded section-with-h">
+                <h2>Form configuration</h2>
+                <textarea id="configuration" class="full-width">{
     "level": ["500", "850", "1000"],
     "param": ["Z", "T"],
     "step": ["24", "36", "48"]
