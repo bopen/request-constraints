@@ -60,13 +60,10 @@ $(document).ready(() => {
       const $input = $(`input[name="${name}"]`);
       $input.each((i, el) => {
         const $field = $(el).closest(".field");
-        if (el.name === fieldName) {
-          return;
-        }
         if (validValues.includes(el.value)) {
-          $field.get(0).classList.remove("invalid");
+          $field.get(0).classList.add("valid");
         } else {
-          $field.get(0).classList.add("invalid");
+          $field.get(0).classList.remove("valid");
         }
       });
     });
