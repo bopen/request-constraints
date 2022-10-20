@@ -1,4 +1,9 @@
+* {
+  box-sizing: border-box
+}
+
 main {
+  height: 90vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1em;
@@ -11,6 +16,12 @@ aside {
   grid-template-rows: 1fr;
   gap: 1em;
   grid-auto-rows: minmax(400px, auto);
+}
+
+.main-block {
+  display: grid;
+  grid-template-rows: 5fr 2fr;
+  gap: 1em;
 }
 
 .border {
@@ -26,10 +37,6 @@ aside {
   width: 100%;
 }
 
-.full-height {
-  height: 100%;
-}
-
 .field {
   display: block;
 }
@@ -42,4 +49,17 @@ aside {
 
 .valid {
   background-color: lightgreen;
+}
+
+#output {
+  background-color: beige;
+}
+
+h2 {
+  margin: 2px 0;
+}
+
+.section-with-h {
+  display: grid;
+  grid-template-rows: min-content 1fr;
 }
