@@ -51,6 +51,12 @@ aside {
   background-color: lightgreen;
 }
 
+.invalid {
+  background-color: lightcoral;
+  font-style: italic;
+  color: #e0e0e0;
+}
+
 #output {
   background-color: beige;
 }
@@ -62,4 +68,8 @@ h2 {
 .section-with-h {
   display: grid;
   grid-template-rows: min-content 1fr;
+}
+
+label:has(input:disabled) {
+  color: #e0e0e0;
 }
