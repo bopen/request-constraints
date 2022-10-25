@@ -1,27 +1,47 @@
 from typing import Any, Dict, Set, List
 
-def load_combinations(combinations: List) -> List[Dict[str, Set[Any]]]:
+
+def parse_valid_combinations(
+        valid_combinations
+) -> List[Dict[str, Set[Any]]]:
     """
-    Loads valid combinations for a given dataset
+    Parse valid combinations for a given dataset.
 
-    :param combinations:
-    :type: List
+    :param valid_combinations: valid combinations in json format
+    :type: List[Dict[str, List[Any]]]
 
-    :rtype: list[dict[str, set[Any]]]:
+    :rtype: list[Dict[str, Set[Any]]]:
     :return: list of dictionaries containing all valid combinations for a
     given dataset.
 
     """
-    for combination in combinations:
+    for combination in valid_combinations:
         for field_name, field_values in combination.items():
             combination[field_name] = set(field_values)
-    return combinations
+    return valid_combinations
+
+
+def parse_possible_selections(
+    possible_selections
+) -> Dict[str, Set[Any]]:
+    for field_name, field_values in possible_selections.items():
+        possible_selections[field_name] = set(field_values)
+    return possible_selections
+
+
+def parse_current_selection(
+    current_selection
+) -> Dict[str, Set[Any]]:
+    for field_name, field_values in current_selection.items():
+        current_selection[field_name] = set(field_values)
+    return current_selection
 
 
 def apply_constraints(
+    possible_selections: Dict[str, Set[Any]],
     valid_combinations: List[Dict[str, Set[Any]]],
-    current_selection: Dict[str, List[Any]],
-)-> Dict[str, Set[Any]]:
+    current_selection: Dict[str, Set[Any]],
+) -> Dict[str, List[Any]]:
     """Checks the current selection against all valid combinations.
     TODO: Handle special cases such as the "date" field.
     A combination is valid if every field contains
@@ -29,6 +49,17 @@ def apply_constraints(
     If a combination is valid, its values are added to the pool
     of valid values (i.e. those that can still be selected without
     running into an invalid request).
+
+    :param possible_selections: a dict of all selectable fields and values
+    e.g. possible_selections = {
+        "date": {"1990-01-01;1999-12-31", "2010-10-10;2011-11-11"},
+        "city": {"rome", "paris", "london"},
+        "level": ["500", "850", "1000"],
+        "param": ["Z", "T"],
+        "step": ["24", "36", "48"],
+        "number": ["1", "2", "3"]
+    }
+    :type: dict[str, set[Any]]:
 
     :param valid_combinations: a list of dictionaries representing
     all valid combinations for a specific dataset
@@ -72,16 +103,14 @@ def apply_constraints(
         'date': {'1990-01-01;1999-12-31'}
      }
     """
-    if current_selection:
-        return get_possible_values(current_selection, valid_combinations)
-    return {}
+    return get_possible_values(possible_selections, current_selection, valid_combinations)
 
 
 def get_possible_values(
-    possible_selections: Dict[str, List[Any]],
-    current_selection: Dict[str, List[Any]],
+    possible_selections: Dict[str, Set[Any]],
+    current_selection: Dict[str, Set[Any]],
     valid_combinations: List[Dict[str, Set[Any]]],
-) -> Dict[str, Set[Any]]:
+) -> Dict[str, List[Any]]:
     """Works only for enumerated fields, i.e. fields with values
      that must be selected one by one (no ranges).
     Checks the current selection against all valid combinations.
@@ -141,8 +170,8 @@ def get_possible_values(
 
 
 def get_always_valid_params(
-        possible_selections: Dict[str, List[Any]],
-        valid_combinations: List[Dict[str, List[Any]]],
+        possible_selections: Dict[str, Set[Any]],
+        valid_combinations: List[Dict[str, Set[Any]]],
 ) -> Dict[str, Set[Any]]:
     result: Dict[str, Set[Any]] = {}
     for field_name, field_values in possible_selections.items():
