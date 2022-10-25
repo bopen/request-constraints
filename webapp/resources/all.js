@@ -59,21 +59,6 @@ $(document).ready(() => {
     return Promise.resolve(result);
   };
 
-  const updateValidityState = (state, fieldName = null) => {
-    Object.entries(config).forEach(([name, values]) => {
-      const $input = $(`input[name="${name}"]`);
-      $input.each((i, el) => {
-        const validValues = state[el.name] || [];
-        const $field = $(el).closest(".field");
-        if (validValues.includes(el.value)) {
-          $field.get(0).classList.add("valid");
-        } else {
-          $field.get(0).classList.remove("valid");
-        }
-      });
-    });
-  };
-
   async function inputChange(ev) {
     const $this = $(this);
     console.log($this.val());
@@ -81,7 +66,7 @@ $(document).ready(() => {
     const result = await validate(constraints, getSelection());
     $disabled.css({ top: "", bottom: "", width: "" });
     console.log(result);
-    updateValidityState(result, ev.target.name);
+    window.updateValidityState(result, config, ev.target.name);
   }
 
   const prepareForm = () => {
