@@ -40,10 +40,10 @@ six=1.16.0=pyh6c4a22f_0
 sqlite=3.39.3=h707629a_0
 tk=8.6.12=h5d9f67b_0
 tomli=2.0.1=py38hecd8cb5_0
-tranquilizer=0.8.0=pyhd8ed1ab_0
 typing_extensions=4.4.0=pyha770c72_0
 werkzeug=2.1.2=pyhd8ed1ab_1
 wheel=0.37.1=pyhd3eb1b0_0
 xz=5.2.6=hca72f7f_0
 zipp=3.9.0=pyhd8ed1ab_0
 zlib=1.2.12=h4dc903c_3
+tranquilizer~=0.8.0
