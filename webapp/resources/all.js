@@ -41,10 +41,11 @@ $(document).ready(() => {
     return selected;
   };
 
-  const validate = async (constraints, selection) => {
+  const validate = async (constraints, selection, configuration) => {
     const formData = new FormData();
     formData.append("constraints", JSON.stringify(constraints));
     formData.append("selection", JSON.stringify(selection));
+    formData.append("configuration", JSON.stringify(configuration));
     try {
       result = await fetch("http://localhost:8086/validate", {
         method: "POST",
@@ -63,7 +64,7 @@ $(document).ready(() => {
     const $this = $(this);
     console.log($this.val());
     $disabled.css({ top: 0, bottom: 0, width: "100%" });
-    const result = await validate(constraints, getSelection());
+    const result = await validate(constraints, getSelection(), config);
     $disabled.css({ top: "", bottom: "", width: "" });
     console.log(result);
     window.updateValidityState(result, config, ev.target.name);
@@ -83,6 +84,7 @@ $(document).ready(() => {
       });
       $form.append(newFieldSet);
     });
+    window.initForm?.(config);
   };
   prepareForm();
 });
