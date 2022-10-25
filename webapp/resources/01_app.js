@@ -4,9 +4,9 @@ window.updateValidityState = (state, config, fieldName = null) => {
     $input.each((i, el) => {
       const validValues = state[el.name] || [];
       if (!validValues.includes(el.value) && fieldName !== name) {
-        $($el).prop("disabled", true);
+        $(el).prop("disabled", true);
       } else {
-        $($el).prop("disabled", false);
+        $(el).prop("disabled", false);
       }
     });
   });
