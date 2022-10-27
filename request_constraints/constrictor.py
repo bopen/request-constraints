@@ -106,7 +106,7 @@ def apply_constraints(
     return get_possible_values(possible_selections, current_selection, valid_combinations)
 
 
-def get_possible_values(
+def get_possible_values1(
     possible_selections: Dict[str, Set[Any]],
     current_selection: Dict[str, Set[Any]],
     valid_combinations: List[Dict[str, Set[Any]]],
@@ -167,6 +167,64 @@ def get_possible_values(
     if result:
         result.update(get_always_valid_params(possible_selections, valid_combinations))
     return {k: list(v) for (k, v) in result.items()}
+
+
+def get_possible_values(
+    possible_selections: Dict[str, Set[Any]],
+    current_selection: Dict[str, Set[Any]],
+    valid_combinations: List[Dict[str, Set[Any]]],
+) -> Dict[str, List[Any]]:
+    """Works only for enumerated fields, i.e. fields with values
+     that must be selected one by one (no ranges).
+    Checks the current selection against all valid combinations.
+    A combination is valid if every field contains
+    at least one value from the current selection.
+    If a combination is valid, its values are added to the pool
+    of valid values (i.e. those that can still be selected without
+    running into an invalid request).
+
+    :param possible_selections: a dict of all selectable fields and values
+    e.g. possible_selections = {
+        "level": ["500", "850", "1000"],
+        "param": ["Z", "T"],
+        "step": ["24", "36", "48"],
+        "number": ["1", "2", "3"]
+    }
+    :type: dict[str, set[Any]]:
+
+    :param valid_combinations: a list of dictionaries representing
+    all valid combinations for a specific dataset
+    e.g. valid_combinations = [
+        {"level": {"500"}, "param": {"Z", "T"}, "step": {"24", "36", "48"}},
+        {"level": {"1000"}, "param": {"Z"}, "step": {"24", "48"}},
+        {"level": {"850"}, "param": {"T"}, "step": {"36", "48"}},
+    ]
+    :type: list[dict[str, set[Any]]]:
+
+    :param current_selection: a dictionary containing the current selection
+    e.g. current_selection = {
+        "param": ["T"],
+        "level": ["850", "500"],
+        "step": ["36"]
+    }
+    :type: dict[str, set[Any]]:
+
+    :rtype: Dict[str, Set[Any]]
+    :return: a dictionary containing all possible values,
+    i.e. those that can still be selected without running into an invalid request
+    e.g. {'level': {'500', '850'}, 'param': {'T', 'Z'}, 'step': {'24', '36', '48'}}
+
+    """
+    result: Dict[str, Set[Any]] = {}
+    for name in possible_selections:
+        sub_selection = current_selection.copy()
+        if name in sub_selection:
+            sub_selection.pop(name)
+        sub_results = get_possible_values1(
+            possible_selections, sub_selection, valid_combinations
+        )
+        result[name] = sub_results[name]
+    return result
 
 
 def get_always_valid_params(
