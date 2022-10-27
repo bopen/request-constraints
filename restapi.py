@@ -4,14 +4,6 @@ from tranquilizer import tranquilize
 from typing import Any, Dict, List
 
 
-possible_selections: Dict[str, List[Any]] = {
-    "level": ["500", "850", "1000"],
-    "param": ["Z", "T"],
-    "step": ["24", "36", "48"],
-    "number": ["1", "2", "3"],
-}
-
-
 @tranquilize(method="post")
 def validate(
     constraints: str, selection: str, configuration: str
