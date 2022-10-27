@@ -30,7 +30,7 @@ $(document).ready(() => {
     } catch (e) {}
   });
 
-  const getSelection = () => {
+  const getSelection = (result) => {
     const selected = {};
     $form.find("input:checked").each((i, el) => {
       selected[el.name] = selected[el.name]
@@ -41,11 +41,32 @@ $(document).ready(() => {
     return selected;
   };
 
+  const getRetrieveRequest = (validation) => {
+    const payload = {};
+    Object.keys(config).forEach((name) => {
+      const $input = $(`input[name="${name}"]:checked`);
+      const selected = [];
+      $input.each((i, el) => {
+        selected.push(el.value);
+      });
+      if (selected.length > 0) {
+        payload[name] = selected.reduce((current, v) => {
+          if (validation[name].includes(v)) {
+            return [...current, v];
+          }
+          return current;
+        }, []);
+      }
+    });
+    return payload;
+  };
+
   const validate = async (constraints, selection, configuration) => {
     const formData = new FormData();
     formData.append("constraints", JSON.stringify(constraints));
     formData.append("selection", JSON.stringify(selection));
     formData.append("configuration", JSON.stringify(configuration));
+    let result = null;
     try {
       result = await fetch("http://localhost:8086/validate", {
         method: "POST",
@@ -68,6 +89,9 @@ $(document).ready(() => {
     $disabled.css({ top: "", bottom: "", width: "" });
     console.log(result);
     window.updateValidityState(result, config, ev.target.name);
+    $("#payload").text(
+      JSON.stringify(getRetrieveRequest(result), undefined, 2)
+    );
   }
 
   const prepareForm = () => {
