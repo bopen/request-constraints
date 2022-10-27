@@ -51,11 +51,14 @@ $(document).ready(() => {
       });
       if (selected.length > 0) {
         payload[name] = selected.reduce((current, v) => {
-          if (validation[name].includes(v)) {
+          if (validation[name]?.includes(v)) {
             return [...current, v];
           }
           return current;
         }, []);
+        if (payload[name].length === 0) {
+          delete payload[name];
+        }
       }
     });
     return payload;
