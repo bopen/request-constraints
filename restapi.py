@@ -1,7 +1,9 @@
 import json
-from request_constraints import constrictor
-from tranquilizer import tranquilize
 from typing import Any, Dict, List
+
+from tranquilizer import tranquilize
+
+from request_constraints import constrictor
 
 
 @tranquilize(method="post")
