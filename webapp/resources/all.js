@@ -68,7 +68,7 @@ $(document).ready(() => {
     formData.append("configuration", JSON.stringify(configuration));
     let result = null;
     try {
-      result = await fetch("http://localhost:8086/validate", {
+      result = await fetch("/validate", {
         method: "POST",
         cache: "no-cache",
         body: JSON.stringify(Object.fromEntries(formData.entries())),
