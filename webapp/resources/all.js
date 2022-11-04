@@ -71,7 +71,8 @@ $(document).ready(() => {
       result = await fetch("http://localhost:8086/validate", {
         method: "POST",
         cache: "no-cache",
-        body: formData,
+        body: JSON.stringify(Object.fromEntries(formData.entries())),
+        headers: { "Content-Type": "application/json" },
       }).then((response) => response.json());
       $("#output").text(JSON.stringify(result, undefined, 2));
     } catch (err) {

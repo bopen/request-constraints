@@ -2,7 +2,7 @@ PROJECT := cads_catalogue_api_service
 CONDA := conda
 CONDAFLAGS :=
 COV_REPORT := html
-.DEFAULT_GOAL := open
+.DEFAULT_GOAL := main
 
 
 default: qa unit-tests type-check
@@ -27,13 +27,9 @@ docs-build:
 
 # DO NOT EDIT ABOVE THIS LINE, ADD COMMANDS BELOW
 
-api_server:
-	tranquilizer restapi.py --allow-origin "*"
-
-web_app:
-	cd webapp && python -m http.server 8085
+main:
+	uvicorn --host 0.0.0.0 --port 8086 restapi:app --reload 
 
 open:
-	open http://localhost:8085
+	open http://localhost:8086
 
-all: api_server web_app open
