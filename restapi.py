@@ -3,7 +3,7 @@ from typing import Any, Dict, List
 
 from tranquilizer import tranquilize
 
-from request_constraints import constrictor
+from cads_catalogue_api_service import constrictor
 
 
 @tranquilize(method="post")
