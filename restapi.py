@@ -27,8 +27,9 @@ def validate(
     parsed_selection = constrictor.parse_selection(
         json.loads(data.selection)
     )
+
     result = constrictor.apply_constraints(
-        parsed_form, parsed_combinations, parsed_selection
+        parsed_form, parsed_selection, parsed_combinations
     )
     return result
 
