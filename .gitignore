@@ -4,3 +4,4 @@
 .*cache
 .coverage
 docs/*
+**/*.ipynb_checkpoints/
